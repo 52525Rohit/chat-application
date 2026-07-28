@@ -14,18 +14,13 @@ function ChatWindow() {
   }, []);
 
   return (
-    <div className="w-full bg-slate-900 text-gray-300 z-30">
+    <div className="flex h-screen w-full flex-col bg-slate-900 text-gray-300 z-30">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (
         <>
           <ChatHeader />
-          <div
-            className="flex-1 overflow-y-auto"
-            style={{ maxHeight: "calc(92vh - 8vh)" }}
-          >
-            <MessageList />
-          </div>
+          <MessageList />
           <MessageInput />
         </>
       )}

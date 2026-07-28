@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { Mail, Lock, Eye, EyeOff, MessageCircle, Loader2 } from "lucide-react";
 import { login } from "../../api/authApi";
 import { useAuth } from "../../context/AuthProvider";
-import { setToken } from "../../utils/authStorage";
+import { setToken, setRefreshToken } from "../../utils/authStorage";
 
 function Login() {
   const [, setAuthUser] = useAuth();
@@ -36,6 +36,7 @@ function Login() {
         toast.success(response.message || "Login Successfully");
         localStorage.setItem("userData", JSON.stringify(authData));
         setToken(response.token);
+        setRefreshToken(response.refreshToken);
         setAuthUser(authData);
         navigate("/");
       } else {

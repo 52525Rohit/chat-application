@@ -11,7 +11,7 @@ function SearchBar() {
   const { setSelectedConversation } = useConversation();
 
   const filteredUsers = allUsers.filter((user) =>
-    user.firstName?.toLowerCase().startsWith(search.toLowerCase())
+    user.firstName?.toLowerCase().startsWith(search.toLowerCase()),
   );
 
   return (

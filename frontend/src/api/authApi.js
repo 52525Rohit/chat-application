@@ -5,3 +5,6 @@ export const login = (credentials) =>
 
 export const register = (payload) =>
   axiosClient.post("/auth/register", payload).then((res) => res.data);
+
+export const logout = (refreshToken) =>
+  axiosClient.post("/auth/logout", { refreshToken }).then((res) => res.data);

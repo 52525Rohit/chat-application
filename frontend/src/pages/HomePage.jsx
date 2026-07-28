@@ -7,9 +7,9 @@ function HomePage() {
   useSocketMessages();
 
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open min-h-screen">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col items-center justify-center sm:z-0 md:z-0 lg:z-50">
+      <div className="drawer-content flex flex-col sm:z-0 md:z-0 lg:z-50">
         <ChatWindow />
       </div>
       <div className="drawer-side">

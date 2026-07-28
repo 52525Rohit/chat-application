@@ -4,17 +4,22 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import ProfileBadge from "../profile/ProfileBadge";
 import { useAuth } from "../../context/AuthProvider";
-import { clearSession } from "../../utils/authStorage";
+import { clearSession, getRefreshToken } from "../../utils/authStorage";
+import { logout } from "../../api/authApi";
 
 function LogoutButton() {
   const navigate = useNavigate();
   const [, setAuthUser] = useAuth();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const refreshToken = getRefreshToken();
     clearSession();
     setAuthUser(null);
     toast.success("Logged out successfully");
     navigate("/login");
+    if (refreshToken) {
+      logout(refreshToken).catch(() => {});
+    }
   };
 
   return (

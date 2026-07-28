@@ -1,6 +1,8 @@
 import fs from "fs/promises";
+import path from "path";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
+import { uploadsDir } from "../middlewares/upload.js";
 import { getIO, getReceiverSocketId } from "../sockets/socketServer.js";
 
 export const sendMessage = async (req, res, next) => {
@@ -53,11 +55,82 @@ export const sendMessage = async (req, res, next) => {
 export const getMessages = async (req, res, next) => {
   const { receiverId } = req.params;
   const senderId = req.user.id;
+  const limit = Math.min(Number(req.query.limit) || 30, 100);
+  const beforeId = req.query.before ? Number(req.query.before) : undefined;
 
   try {
-    const rows = await Message.findConversation(senderId, receiverId);
+    const rows = await Message.findConversationPage(senderId, receiverId, {
+      limit,
+      beforeId,
+    });
     const messages = rows.map((row) => Message.toResponse(row));
-    return res.json({ success: true, messages });
+    const hasMore = rows.length === limit;
+
+    if (!beforeId) {
+      const readCount = await Message.markConversationRead(senderId, receiverId);
+      if (readCount > 0) {
+        const senderSocketId = getReceiverSocketId(String(receiverId));
+        if (senderSocketId) {
+          getIO().to(senderSocketId).emit("messagesRead", { readerId: senderId });
+        }
+      }
+    }
+
+    return res.json({ success: true, messages, hasMore });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const editMessage = async (req, res, next) => {
+  const { messageId } = req.params;
+  const senderId = req.user.id;
+  const { message_content } = req.body;
+
+  try {
+    const updated = await Message.editMessage(messageId, senderId, message_content);
+    if (!updated) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Message not found or not editable" });
+    }
+
+    const messageData = Message.toResponse(updated);
+    const receiverSocketId = getReceiverSocketId(String(updated.receiver_id));
+    if (receiverSocketId) {
+      getIO().to(receiverSocketId).emit("messageEdited", messageData);
+    }
+
+    return res.json({ success: true, messageData });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteMessage = async (req, res, next) => {
+  const { messageId } = req.params;
+  const senderId = req.user.id;
+
+  try {
+    const deleted = await Message.softDeleteMessage(messageId, senderId);
+    if (!deleted) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Message not found or not deletable" });
+    }
+
+    if (deleted.images_url) {
+      await fs.unlink(path.join(uploadsDir, deleted.images_url)).catch(() => {});
+    }
+
+    const receiverSocketId = getReceiverSocketId(String(deleted.receiver_id));
+    if (receiverSocketId) {
+      getIO()
+        .to(receiverSocketId)
+        .emit("messageDeleted", { message_id: Number(messageId) });
+    }
+
+    return res.json({ success: true, message_id: Number(messageId) });
   } catch (error) {
     return next(error);
   }

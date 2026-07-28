@@ -32,6 +32,20 @@ export const initSocket = (server) => {
     users[socket.userId] = socket.id;
     io.emit("getOnlineUsers", Object.keys(users));
 
+    socket.on("typing", ({ to }) => {
+      const receiverSocketId = users[String(to)];
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("typing", { from: socket.userId });
+      }
+    });
+
+    socket.on("stopTyping", ({ to }) => {
+      const receiverSocketId = users[String(to)];
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("stopTyping", { from: socket.userId });
+      }
+    });
+
     socket.on("disconnect", () => {
       console.log("Socket disconnected:", socket.id);
       delete users[socket.userId];

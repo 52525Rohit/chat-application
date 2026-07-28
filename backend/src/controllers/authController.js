@@ -1,18 +1,25 @@
-﻿import fs from "fs/promises";
+import fs from "fs/promises";
 import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
-import { generateToken } from "../utils/jwt.js";
+import RefreshToken from "../models/refreshTokenModel.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  hashRefreshToken,
+} from "../utils/jwt.js";
+
+const issueTokens = async (user) => {
+  const accessToken = generateAccessToken({ id: user.id, email: user.email });
+  const refreshToken = generateRefreshToken();
+  await RefreshToken.create({
+    userId: user.id,
+    tokenHash: hashRefreshToken(refreshToken),
+  });
+  return { accessToken, refreshToken };
+};
 
 export const register = async (req, res, next) => {
   const { firstName, lastName, email, password, mobile } = req.body || {};
-
-  if (!firstName || !lastName || !email || !password || !mobile) {
-    if (req.file) await fs.unlink(req.file.path).catch(() => {});
-    return res.status(400).json({
-      success: false,
-      message: "All registration fields are required",
-    });
-  }
 
   try {
     const existing = await User.findByEmail(email);
@@ -33,13 +40,14 @@ export const register = async (req, res, next) => {
       profilePic: req.file ? req.file.filename : null,
     });
     const newUser = await User.findById(insertId);
-    const token = generateToken({ id: newUser.id, email: newUser.email });
+    const { accessToken, refreshToken } = await issueTokens(newUser);
 
     return res.status(201).json({
       success: true,
       message: "Registration successful",
       user: User.toResponse(newUser),
-      token,
+      token: accessToken,
+      refreshToken,
     });
   } catch (error) {
     if (req.file) await fs.unlink(req.file.path).catch(() => {});
@@ -49,12 +57,6 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Email and password are required" });
-  }
 
   try {
     const userRow = await User.findByEmail(email);
@@ -71,14 +73,58 @@ export const login = async (req, res, next) => {
         .json({ success: false, message: "Invalid email or password" });
     }
 
-    const token = generateToken({ id: userRow.id, email: userRow.email });
+    const { accessToken, refreshToken } = await issueTokens(userRow);
 
     return res.status(200).json({
       success: true,
       message: "Login successful",
       user: User.toResponse(userRow),
-      token,
+      token: accessToken,
+      refreshToken,
     });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const refresh = async (req, res, next) => {
+  const { refreshToken } = req.body;
+
+  try {
+    const tokenHash = hashRefreshToken(refreshToken);
+    const stored = await RefreshToken.findValidByHash(tokenHash);
+    if (!stored) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid or expired refresh token" });
+    }
+
+    const user = await User.findById(stored.user_id);
+    if (!user) {
+      return res.status(401).json({ success: false, message: "User not found" });
+    }
+
+    await RefreshToken.revokeByHash(tokenHash);
+    const tokens = await issueTokens(user);
+
+    return res.json({
+      success: true,
+      token: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  const { refreshToken } = req.body || {};
+
+  try {
+    if (refreshToken) {
+      await RefreshToken.revokeByHash(hashRefreshToken(refreshToken));
+    }
+    return res.json({ success: true, message: "Logged out" });
   } catch (error) {
     return next(error);
   }

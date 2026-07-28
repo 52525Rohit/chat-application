@@ -27,11 +27,27 @@ CREATE TABLE IF NOT EXISTS messages (
   images_url VARCHAR(255) DEFAULT NULL,
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   is_read TINYINT(1) NOT NULL DEFAULT 0,
+  is_edited TINYINT(1) NOT NULL DEFAULT 0,
+  is_deleted TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   KEY idx_sender_id (sender_id),
   KEY idx_receiver_id (receiver_id),
   CONSTRAINT fk_messages_sender FOREIGN KEY (sender_id) REFERENCES employees(id) ON DELETE CASCADE,
   CONSTRAINT fk_messages_receiver FOREIGN KEY (receiver_id) REFERENCES employees(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Refresh tokens for JWT refresh-token flow (opaque token, hashed at rest)
+CREATE TABLE IF NOT EXISTS refresh_tokens (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  token_hash CHAR(64) NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  revoked_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY idx_token_hash (token_hash),
+  KEY idx_user_id (user_id),
+  CONSTRAINT fk_refresh_tokens_user FOREIGN KEY (user_id) REFERENCES employees(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Optional sample user insert
