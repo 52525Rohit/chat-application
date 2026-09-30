@@ -14,12 +14,12 @@ function ConversationItem({ user }) {
 
   return (
     <div
-      className={`hover:bg-slate-600 duration-300 ${
-        isSelected ? "bg-slate-700" : ""
+      className={`border-l-4 duration-300 ${
+        isSelected ? "border-brand bg-brand/15" : "border-transparent"
       }`}
       onClick={() => setSelectedConversation(user)}
     >
-      <div className="flex space-x-4 px-6 py-6 hover:bg-slate-500 duration-300 cursor-pointer">
+      <div className="flex space-x-4 px-6 py-6 hover:bg-surface-2 duration-300 cursor-pointer">
         <div>
           <div className="avatar">
             <div className="w-12 rounded-full">

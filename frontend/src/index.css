@@ -1,6 +1,77 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* App colours (same as login page). Change here to re-theme everything. */
+@theme {
+  --color-brand: #ff5a1f;
+  --color-brand-light: #ff7a3d;
+  --color-brand-dark: #e64a19;
+  --color-base: #0f0f14;
+  --color-surface: #25252b;
+  --color-surface-2: #32323a;
+  --color-surface-3: #3f3f48;
+}
+
+/* Same colours for daisyUI components (btn, chat-bubble, modal, skeleton...) */
+@plugin "daisyui/theme" {
+  name: "chatsphere";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: #0f0f14;
+  --color-base-200: #25252b;
+  --color-base-300: #32323a;
+  --color-base-content: #e5e5ea;
+  --color-primary: #ff5a1f;
+  --color-primary-content: #ffffff;
+  --color-secondary: #e64a19;
+  --color-secondary-content: #ffffff;
+  --color-accent: #ff7a3d;
+  --color-accent-content: #ffffff;
+  --color-neutral: #3f3f48;
+  --color-neutral-content: #ffffff;
+  --color-info: #38bdf8;
+  --color-info-content: #0f0f14;
+  --color-success: #22c55e;
+  --color-success-content: #0f0f14;
+  --color-warning: #facc15;
+  --color-warning-content: #0f0f14;
+  --color-error: #ef4444;
+  --color-error-content: #ffffff;
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+body {
+  background: var(--color-base);
+  color: #e5e5ea;
+}
+
+* {
+  scrollbar-color: var(--color-surface-3) transparent;
+}
+
+/* Custom toast (new-message notification) slide in/out from the right */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(110%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes toast-out {
+  to { opacity: 0; transform: translateX(110%); }
+}
+.animate-enter {
+  animation: toast-in 0.3s ease-out;
+}
+.animate-leave {
+  animation: toast-out 0.25s ease-in forwards;
+}
+
 
 
 /* .flex-1::-webkit-scrollbar {

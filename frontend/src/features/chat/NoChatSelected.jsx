@@ -31,7 +31,7 @@ function NoChatSelected() {
         <CiMenuFries className="text-white text-xl" />
       </label>
 
-      <div className="bg-gray-800 text-white h-screen">
+      <div className="bg-base text-white h-screen">
         <div className="flex space-x-4 px-6 py-6 justify-center">
           <div className="avatar avatar-online">
             <div className="w-32 rounded-full">
@@ -44,7 +44,7 @@ function NoChatSelected() {
                 accept="image/*"
                 onChange={(e) => uploadProfilePic(e.target.files[0])}
               />
-              <div className="absolute bottom-0 right-0 bg-gray-800 rounded-full p-1 cursor-pointer">
+              <div className="absolute bottom-0 right-0 bg-surface rounded-full p-1 cursor-pointer">
                 Edit
               </div>
             </label>
@@ -55,17 +55,17 @@ function NoChatSelected() {
           <div className="flex justify-center space-x-2 p-4 px-4">
             <FaUserAlt className="relative" />
             <span className="font-bold">FullName:</span>
-            <h1 className="text-red-400">{profile?.firstName || "N/A"}</h1>
+            <h1 className="text-brand-light">{profile?.firstName || "N/A"}</h1>
           </div>
           <div className="flex justify-center p-4 px-4 space-x-2">
             <AiOutlineMail className="relative top-1" />
             <span className="font-bold">Email:</span>
-            <h1 className="text-red-400">{profile?.email || "N/A"}</h1>
+            <h1 className="text-brand-light">{profile?.email || "N/A"}</h1>
           </div>
           <div className="flex justify-center p-4 px-4 space-x-2">
             <IoCall />
             <span className="font-bold">Mobile No:</span>
-            <h1 className="text-red-400">{profile?.mobile || "N/A"}</h1>
+            <h1 className="text-brand-light">{profile?.mobile || "N/A"}</h1>
           </div>
         </div>
       </div>

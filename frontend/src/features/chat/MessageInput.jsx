@@ -109,11 +109,11 @@ function MessageInput() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="shrink-0 border-t border-slate-700 bg-slate-800 px-4 py-3"
+      className="shrink-0 border-t border-surface-2 bg-surface px-4 py-3"
     >
       {previewUrl && (
         <div className="relative mb-2 inline-block">
-          <div className="size-20 overflow-hidden rounded-lg border border-slate-700 bg-slate-900">
+          <div className="size-20 overflow-hidden rounded-lg border border-surface-2 bg-base">
             <img
               src={previewUrl}
               alt="Selected attachment preview"
@@ -124,7 +124,7 @@ function MessageInput() {
             type="button"
             onClick={handleRemoveImage}
             aria-label="Remove attachment"
-            className="absolute -right-2 -top-2 rounded-full bg-slate-800 p-1 text-white shadow-md transition hover:bg-red-500"
+            className="absolute -right-2 -top-2 rounded-full bg-surface p-1 text-white shadow-md transition hover:bg-red-500"
           >
             <IoClose className="size-3.5" />
           </button>
@@ -163,13 +163,13 @@ function MessageInput() {
           placeholder={image ? "Add a caption (optional)" : "Type here"}
           value={message}
           onChange={handleTextChange}
-          className="flex-1 min-w-0 rounded-full border border-slate-600 bg-slate-900 px-4 py-2.5 outline-none focus:border-blue-500"
+          className="flex-1 min-w-0 rounded-full border border-surface-3 bg-base px-4 py-2.5 outline-none focus:border-brand"
         />
 
         <button
           type="submit"
           disabled={isSending}
-          className="btn btn-circle btn-sm shrink-0 border-none bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
+          className="btn btn-circle btn-sm shrink-0 border-none bg-brand text-white hover:bg-brand-dark disabled:opacity-50"
         >
           <IoSend className="text-base" />
         </button>

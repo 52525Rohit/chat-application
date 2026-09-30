@@ -1,0 +1,394 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 16px;
+  background: #0f0f14;
+  font-family: "Poppins", system-ui, sans-serif;
+}
+
+/* ---------- App name above the card ---------- */
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+}
+.auth-brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #ff5a1f;
+  border-radius: 14px;
+  color: #ff5a1f;
+  box-shadow: 0 0 16px rgba(255, 90, 31, 0.45);
+}
+.auth-brand h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.auth-brand h1 span {
+  color: #ff5a1f;
+}
+
+/* Card size / accent colour: change here */
+.auth-container {
+  --w: 880px;
+  --h: 560px;
+  --c: #ff5a1f;
+  position: relative;
+  flex-shrink: 0;
+  width: var(--w);
+  height: var(--h);
+  overflow: hidden;
+  color: #fff;
+  background: #25252b;
+  border: 2px solid var(--c);
+  box-shadow: 0 0 25px var(--c);
+}
+
+/* ---------- Diagonal shapes ---------- */
+.auth-shape1 {
+  position: absolute;
+  right: 0;
+  top: -5px;
+  width: calc(var(--w) * 1.13);
+  height: calc(var(--h) * 1.34);
+  background: linear-gradient(45deg, #25252b, var(--c));
+  transform: rotate(10deg) skewY(40deg);
+  transform-origin: bottom right;
+  transition: 1.5s ease;
+  transition-delay: 1.6s;
+}
+.auth-container.active .auth-shape1 {
+  transform: rotate(0) skewY(0);
+  transition-delay: 0.5s;
+}
+.auth-shape2 {
+  position: absolute;
+  left: calc(var(--w) / 3);
+  top: 100%;
+  width: calc(var(--w) * 1.13);
+  height: calc(var(--h) * 1.56);
+  background: #25252b;
+  border-top: 3px solid var(--c);
+  transform: rotate(0) skewY(0);
+  transform-origin: bottom left;
+  transition: 1.5s ease;
+  transition-delay: 0.5s;
+}
+.auth-container.active .auth-shape2 {
+  transform: rotate(-11deg) skewY(-41deg);
+  transition-delay: 1.2s;
+}
+
+/* ---------- Boxes ---------- */
+.auth-form-box,
+.auth-info {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.auth-form-box.login {
+  left: 0;
+  padding: 0 50px;
+  visibility: visible;
+  transition: visibility 0s 0s;
+}
+.auth-form-box.register {
+  right: 0;
+  padding: 0 50px;
+  visibility: hidden;
+  transition: visibility 0s 1.5s;
+}
+.auth-container.active .auth-form-box.login {
+  visibility: hidden;
+  transition: visibility 0s 1.5s;
+}
+.auth-container.active .auth-form-box.register {
+  visibility: visible;
+  transition: visibility 0s 0s;
+}
+.auth-info {
+  pointer-events: none;
+}
+.auth-info.login {
+  right: 0;
+  text-align: right;
+  padding: 0 40px 60px 140px;
+}
+.auth-info.register {
+  left: 0;
+  text-align: left;
+  padding: 0 140px 60px 40px;
+}
+.auth-info h2 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.15;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.auth-info p {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.auth-form-box h2 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---------- Slide + blur animation (use --i for stagger) ---------- */
+.animation {
+  transition-property: transform, opacity, filter;
+  transition-duration: 0.7s;
+  transition-timing-function: ease;
+}
+
+/* Login: visible by default, leaves to the left / info to the right */
+.auth-form-box.login .animation,
+.auth-info.login .animation {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  transition-delay: calc(2s + 0.1s * var(--i));
+}
+.auth-container.active .auth-form-box.login .animation {
+  transform: translateX(-120%);
+  opacity: 0;
+  filter: blur(10px);
+  transition-delay: calc(0.1s * var(--i));
+}
+.auth-container.active .auth-info.login .animation {
+  transform: translateX(120%);
+  opacity: 0;
+  filter: blur(10px);
+  transition-delay: calc(0.1s * var(--i));
+}
+
+/* Register: hidden by default, enters when .active */
+.auth-form-box.register .animation {
+  transform: translateX(120%);
+  opacity: 0;
+  filter: blur(10px);
+  transition-delay: calc(0.1s * var(--i));
+}
+.auth-info.register .animation {
+  transform: translateX(-120%);
+  opacity: 0;
+  filter: blur(10px);
+  transition-delay: calc(0.1s * var(--i));
+}
+.auth-container.active .auth-form-box.register .animation,
+.auth-container.active .auth-info.register .animation {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  transition-delay: calc(1.5s + 0.1s * var(--i));
+}
+
+/* ---------- Inputs ---------- */
+.auth-input {
+  position: relative;
+  width: 100%;
+  height: 42px;
+  margin-top: 24px;
+}
+.auth-form-box.register .auth-input {
+  margin-top: 20px;
+}
+.auth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.auth-input input {
+  width: 100%;
+  height: 100%;
+  padding-right: 26px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid #fff;
+  outline: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.4s;
+}
+.auth-input input:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  transition: background-color 9999s;
+}
+.auth-input label {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  pointer-events: none;
+  transition: 0.4s;
+}
+.auth-input input:focus,
+.auth-input input:not(:placeholder-shown) {
+  border-bottom-color: var(--c);
+}
+.auth-input input:focus ~ label,
+.auth-input input:not(:placeholder-shown) ~ label {
+  top: -6px;
+  font-size: 13px;
+  color: var(--c);
+}
+.auth-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: #fff;
+  pointer-events: none;
+}
+.auth-eye {
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.auth-input input:focus ~ .auth-icon {
+  color: var(--c);
+}
+
+/* ---------- Button + switch link ---------- */
+.auth-btn {
+  width: 100%;
+  height: 45px;
+  margin-top: 26px;
+  border: 2px solid var(--c);
+  border-radius: 40px;
+  background: linear-gradient(180deg, #ff7a3d, #e64a19);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    filter 0.3s,
+    box-shadow 0.3s;
+}
+.auth-btn:hover:not(:disabled) {
+  filter: brightness(1.12);
+  box-shadow: 0 0 14px var(--c);
+}
+.auth-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.auth-switch {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.auth-switch a {
+  color: var(--c);
+  font-weight: 600;
+  text-decoration: none;
+}
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Avatar upload (Register) ---------- */
+.auth-avatar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.auth-avatar-pic {
+  position: relative;
+  flex-shrink: 0;
+}
+.auth-avatar-pic label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  overflow: hidden;
+  border: 2px dashed #666;
+  border-radius: 50%;
+  color: #888;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.auth-avatar-pic label:hover {
+  border-color: var(--c);
+  color: var(--c);
+}
+.auth-avatar-pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.auth-avatar-clear {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: flex;
+  padding: 2px;
+  border: 0;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  cursor: pointer;
+}
+.auth-avatar-text {
+  min-width: 0;
+  font-size: 13px;
+}
+.auth-avatar-text label {
+  color: var(--c);
+  font-weight: 600;
+  cursor: pointer;
+}
+.auth-avatar-text p {
+  margin: 0;
+  overflow: hidden;
+  color: #9ca3af;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Small screens: scale the whole card down ---------- */
+@media (max-width: 920px) {
+  .auth-container {
+    zoom: 0.8;
+  }
+}
+@media (max-width: 740px) {
+  .auth-container {
+    zoom: 0.6;
+  }
+}
+@media (max-width: 560px) {
+  .auth-container {
+    zoom: 0.44;
+  }
+}

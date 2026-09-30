@@ -9,7 +9,7 @@ import { useAuth } from "../../context/AuthProvider";
 import { editMessage, deleteMessage } from "../../api/messageApi";
 import useConversation from "../../store/useConversationStore";
 
-const spinnerColors = Array(5).fill("#4239f9");
+const spinnerColors = Array(5).fill("#ff5a1f");
 
 function MessageBubble({ message }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +26,7 @@ function MessageBubble({ message }) {
 
   const isSender = message.sender_id === authUser?.employeeData?.id;
   const chatName = isSender ? "chat-end" : "chat-start";
-  const chatColor = isSender ? "bg-blue-500" : "bg-gray-600";
+  const chatColor = isSender ? "bg-brand text-white" : "bg-surface-2 text-white";
 
   const formattedTime = new Date(message.timestamp).toLocaleTimeString([], {
     hour: "2-digit",
@@ -57,7 +57,7 @@ function MessageBubble({ message }) {
     return content.replace(
       urlRegex,
       (url) =>
-        `<a href="${url}" target="_blank" class="text-indigo-900 underline">${url}</a>`,
+        `<a href="${url}" target="_blank" class="underline">${url}</a>`,
     );
   };
 
@@ -154,10 +154,10 @@ function MessageBubble({ message }) {
       <div className="px-4 py-1 group">
         <div className={`chat ${isSender ? chatName : "chat-start"}`}>
           <div
-            className={`chat-bubble ${isSender ? chatColor : "bg-gray-600"} relative`}
+            className={`chat-bubble ${isSender ? chatColor : "bg-surface-2 text-white"} relative`}
           >
             {isSender && !message.is_deleted && (
-              <div className="absolute -top-3 right-1 hidden group-hover:flex space-x-1 bg-slate-800 rounded-full px-1.5 py-0.5">
+              <div className="absolute -top-3 right-1 hidden group-hover:flex space-x-1 bg-surface rounded-full px-1.5 py-0.5">
                 <MdEdit
                   className="size-4 text-gray-200 cursor-pointer hover:text-white"
                   onClick={startEditing}
@@ -193,7 +193,7 @@ function MessageBubble({ message }) {
                   }}
                   autoFocus
                   disabled={isSaving}
-                  className="text-black rounded px-2 py-1 text-sm"
+                  className="rounded bg-base px-2 py-1 text-sm text-white outline-none ring-1 ring-surface-3 focus:ring-brand"
                 />
                 <IoCheckmark
                   className="size-5 cursor-pointer hover:text-green-300"
@@ -214,7 +214,7 @@ function MessageBubble({ message }) {
             )}
 
             {!message.is_deleted && message.images_url && (
-              <div className="relative w-40 h-50 rounded-lg border border-zinc-700 flex items-center justify-center">
+              <div className="relative w-40 h-50 rounded-lg border border-surface-2 flex items-center justify-center">
                 <img
                   src={imageUrl}
                   alt="Sent"
@@ -245,7 +245,7 @@ function MessageBubble({ message }) {
             )}
             <span>{formattedTime}</span>
             {isSender && !message.is_deleted && (
-              <span className={message.is_read ? "text-blue-400" : ""}>
+              <span className={message.is_read ? "text-brand-light" : ""}>
                 {message.is_read ? (
                   <IoCheckmarkDone className="inline size-4" />
                 ) : (
@@ -258,7 +258,7 @@ function MessageBubble({ message }) {
       </div>
 
       <dialog ref={deleteDialogRef} className="modal">
-        <div className="modal-box bg-slate-800 text-white">
+        <div className="modal-box bg-surface text-white">
           <h3 className="text-lg font-bold">Delete message?</h3>
           <p className="py-3 text-gray-300">
             This message will be deleted for everyone. This can't be undone.

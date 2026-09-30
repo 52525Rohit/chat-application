@@ -5,7 +5,7 @@ import LogoutButton from "./LogoutButton";
 
 function Sidebar() {
   return (
-    <div className="w-full bg-black text-white">
+    <div className="w-full bg-surface text-white">
       <SearchBar />
 
       <div

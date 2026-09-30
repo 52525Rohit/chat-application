@@ -17,11 +17,11 @@ function ProfileBadge() {
   return (
     <div
       onClick={() => navigate("/profileDetails")}
-      className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800/80 cursor-pointer transition-all duration-200 group"
+      className="flex items-center gap-3 p-2.5 rounded-xl bg-base/60 hover:bg-surface/80 border border-surface/80 cursor-pointer transition-all duration-200 group"
     >
       {/* Avatar with Status Indicator */}
       <div className="relative flex-shrink-0">
-        <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-indigo-500/30 group-hover:ring-indigo-500/70 transition-all">
+        <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-brand/30 group-hover:ring-brand/70 transition-all">
           <img
             src={profilePic}
             alt="Profile"
@@ -29,12 +29,12 @@ function ProfileBadge() {
           />
         </div>
         {/* Online Status Dot */}
-        <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-slate-950" />
+        <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-base" />
       </div>
 
       {/* User Info */}
       <div className="flex flex-col min-w-0 flex-1">
-        <h2 className="text-sm font-semibold text-slate-100 truncate group-hover:text-indigo-300 transition-colors">
+        <h2 className="text-sm font-semibold text-slate-100 truncate group-hover:text-brand-light transition-colors">
           {profile?.firstName || "User Profile"}
         </h2>
         <span className="text-xs text-slate-400 truncate">

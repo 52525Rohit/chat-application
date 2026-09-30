@@ -1,4 +1,5 @@
 import toast from "react-hot-toast";
+import { IoClose } from "react-icons/io5";
 import { getProfilePicUrl } from "../api/axiosClient";
 
 const profilePic = getProfilePicUrl;
@@ -27,35 +28,31 @@ const Notifications = (message) => {
     <div
       className={`${
         t.visible ? "animate-enter" : "animate-leave"
-      } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+      } pointer-events-auto flex w-[360px] max-w-[calc(100vw-2rem)] items-start gap-3 rounded-xl border border-brand border-l-4 bg-surface p-3.5 shadow-[0_0_18px_rgba(255,90,31,0.35)]`}
     >
-      <div className="flex-1 w-0 p-4">
-        <div className="flex items-start">
-          <div className="flex-shrink-0 pt-0.5">
-            <img
-              className="h-10 w-10 rounded-full"
-              src={profilePic(message.profilePic)}
-              alt=""
-            />
-          </div>
-          <div className="ml-3 flex-1">
-            <p className="text-sm font-medium text-gray-900">
-              {message.first_Name}
-            </p>
-            <p className="mt-1 text-sm text-gray-500">
-              {message.message_content}
-            </p>
-          </div>
-        </div>
+      <img
+        className="size-11 shrink-0 rounded-full object-cover ring-2 ring-brand/40"
+        src={profilePic(message.profilePic)}
+        alt=""
+      />
+      <div className="min-w-0 flex-1">
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-brand">
+          New message
+        </p>
+        <p className="truncate text-sm font-semibold text-white">
+          {message.first_Name}
+        </p>
+        <p className="mt-0.5 line-clamp-2 text-sm text-gray-400">
+          {message.message_content || "Sent a photo"}
+        </p>
       </div>
-      <div className="flex border-l border-gray-200">
-        <button
-          onClick={() => toast.dismiss(t.id)}
-          className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          Close
-        </button>
-      </div>
+      <button
+        onClick={() => toast.dismiss(t.id)}
+        aria-label="Close notification"
+        className="shrink-0 rounded-full p-1 text-gray-400 transition hover:bg-surface-3 hover:text-white"
+      >
+        <IoClose className="size-4" />
+      </button>
     </div>
   ));
 };

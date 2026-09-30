@@ -13,7 +13,7 @@ function ConversationList() {
 
   return (
     <div>
-      <h1 className="px-8 py-2 text-white font-semibold bg-slate-800 rounded-md">
+      <h1 className="px-8 py-2 text-white font-semibold bg-surface-2 rounded-md">
         Messages
       </h1>
       <div

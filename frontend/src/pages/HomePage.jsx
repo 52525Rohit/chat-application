@@ -14,7 +14,7 @@ function HomePage() {
       </div>
       <div className="drawer-side">
         <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-        <ul className="menu w-80 min-h-full bg-black text-base-content">
+        <ul className="menu w-80 min-h-full bg-surface text-base-content">
           <Sidebar />
         </ul>
       </div>
