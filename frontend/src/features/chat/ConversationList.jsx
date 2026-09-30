@@ -12,14 +12,11 @@ function ConversationList() {
   );
 
   return (
-    <div>
-      <h1 className="px-8 py-2 text-white font-semibold bg-surface-2 rounded-md">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <h1 className="mx-3 rounded-md bg-surface-2 px-4 py-2 font-semibold text-white">
         Messages
       </h1>
-      <div
-        className="py-2 flex-1 overflow-y-auto"
-        style={{ maxHeight: "calc(84vh - 10vh)" }}
-      >
+      <div className="min-h-0 flex-1 overflow-y-auto py-2">
         {otherUsers.map((user) => (
           <ConversationItem key={user.id} user={user} />
         ))}

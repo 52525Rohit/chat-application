@@ -109,7 +109,7 @@ function MessageInput() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="shrink-0 border-t border-surface-2 bg-surface px-4 py-3"
+      className="shrink-0 border-t border-surface-2 bg-surface px-2 py-2 sm:px-4 sm:py-3"
     >
       {previewUrl && (
         <div className="relative mb-2 inline-block">
@@ -152,8 +152,12 @@ function MessageInput() {
             onClick={() => setOpen((prev) => !prev)}
           />
           {open && (
-            <div className="absolute bottom-12 left-0 z-50">
-              <EmojiPicker onEmojiClick={handleEmoji} />
+            <div className="fixed bottom-20 left-2 z-50 sm:absolute sm:bottom-12 sm:left-0">
+              <EmojiPicker
+                onEmojiClick={handleEmoji}
+                width="min(350px, calc(100vw - 1rem))"
+                height={400}
+              />
             </div>
           )}
         </div>

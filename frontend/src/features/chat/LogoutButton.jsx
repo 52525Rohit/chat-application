@@ -23,19 +23,20 @@ function LogoutButton() {
   };
 
   return (
-    <>
-      <hr />
-      <div className="h-[10vh] bg-transparent">
-        <div>
-          <BiLogOutCircle
-            className="text-5xl text-white hover:bg-surface-2 duration-300 cursor-pointer rounded-full p-2 ml-2 mt-1"
-            onClick={handleLogout}
-          />
-        </div>
-
+    <div className="flex shrink-0 items-center gap-2 border-t border-surface-2 p-3">
+      <div className="min-w-0 flex-1">
         <ProfileBadge />
       </div>
-    </>
+      <button
+        type="button"
+        onClick={handleLogout}
+        aria-label="Log out"
+        title="Log out"
+        className="shrink-0 rounded-full p-2 text-white transition hover:bg-surface-2 hover:text-brand"
+      >
+        <BiLogOutCircle className="text-3xl" />
+      </button>
+    </div>
   );
 }
 

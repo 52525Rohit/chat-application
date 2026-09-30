@@ -3,6 +3,7 @@ import useConversation from "../../store/useConversationStore";
 import { getProfilePicUrl } from "../../api/axiosClient";
 import { useSocketContext } from "../../context/SocketContext";
 import defaultAvatar from "../../../public/user.jpg";
+import { closeDrawer } from "../../utils/drawer";
 
 function ConversationItem({ user }) {
   const { selectedConversation, setSelectedConversation } = useConversation();
@@ -14,26 +15,22 @@ function ConversationItem({ user }) {
 
   return (
     <div
-      className={`border-l-4 duration-300 ${
+      className={`flex cursor-pointer items-center gap-3 border-l-4 px-4 py-3 duration-300 hover:bg-surface-2 ${
         isSelected ? "border-brand bg-brand/15" : "border-transparent"
       }`}
-      onClick={() => setSelectedConversation(user)}
+      onClick={() => {
+        setSelectedConversation(user);
+        closeDrawer();
+      }}
     >
-      <div className="flex space-x-4 px-6 py-6 hover:bg-surface-2 duration-300 cursor-pointer">
-        <div>
-          <div className="avatar">
-            <div className="w-12 rounded-full">
-              <img src={profilePic} alt="User Profile" />
-            </div>
-            <div>
-              <h2>{isOnline ? "🟢" : "🔴"}</h2>
-            </div>
-          </div>
+      <div className={`avatar shrink-0 ${isOnline ? "avatar-online" : "avatar-offline"}`}>
+        <div className="w-11 rounded-full">
+          <img src={profilePic} alt="User Profile" />
         </div>
-        <div>
-          <h1 className="font-bold">{user.firstName}</h1>
-          <span>{user.email}</span>
-        </div>
+      </div>
+      <div className="min-w-0">
+        <h1 className="truncate font-bold">{user.firstName}</h1>
+        <span className="block truncate text-sm text-gray-400">{user.email}</span>
       </div>
     </div>
   );

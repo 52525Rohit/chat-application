@@ -14,7 +14,7 @@ function ChatWindow() {
   }, []);
 
   return (
-    <div className="flex h-screen w-full flex-col bg-base text-gray-300 z-30">
+    <div className="flex h-full min-h-0 w-full flex-col bg-base text-gray-300">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (

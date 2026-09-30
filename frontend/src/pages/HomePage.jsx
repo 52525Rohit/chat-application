@@ -7,16 +7,20 @@ function HomePage() {
   useSocketMessages();
 
   return (
-    <div className="drawer lg:drawer-open min-h-screen">
+    <div className="drawer lg:drawer-open h-dvh">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col sm:z-0 md:z-0 lg:z-50">
+      <div className="drawer-content flex h-dvh min-w-0 flex-col">
         <ChatWindow />
       </div>
-      <div className="drawer-side">
-        <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-        <ul className="menu w-80 min-h-full bg-surface text-base-content">
+      <div className="drawer-side z-40">
+        <label
+          htmlFor="my-drawer-2"
+          aria-label="Close sidebar"
+          className="drawer-overlay"
+        ></label>
+        <div className="h-dvh w-[85vw] max-w-80 bg-surface">
           <Sidebar />
-        </ul>
+        </div>
       </div>
     </div>
   );

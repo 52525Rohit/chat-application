@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "chat-app",
+  "name": "chat-application",
   "compatibility_date": "2026-01-01",
   "assets": {
     "directory": "./dist",

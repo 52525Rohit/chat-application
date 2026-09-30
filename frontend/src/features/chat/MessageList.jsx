@@ -62,7 +62,7 @@ function MessageList() {
         ))}
 
       {!loading && messages.length === 0 && (
-        <p className="text-center mt-[20%]">
+        <p className="mt-[20%] px-4 text-center">
           Say! Hi to start the conversation
         </p>
       )}

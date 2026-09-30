@@ -151,13 +151,13 @@ function MessageBubble({ message }) {
 
   return (
     <>
-      <div className="px-4 py-1 group">
+      <div className="px-2 py-1 group sm:px-4">
         <div className={`chat ${isSender ? chatName : "chat-start"}`}>
           <div
             className={`chat-bubble ${isSender ? chatColor : "bg-surface-2 text-white"} relative`}
           >
             {isSender && !message.is_deleted && (
-              <div className="absolute -top-3 right-1 hidden group-hover:flex space-x-1 bg-surface rounded-full px-1.5 py-0.5">
+              <div className="absolute -top-3 right-1 hidden group-hover:flex [@media(hover:none)]:flex space-x-1 bg-surface rounded-full px-1.5 py-0.5">
                 <MdEdit
                   className="size-4 text-gray-200 cursor-pointer hover:text-white"
                   onClick={startEditing}
@@ -182,7 +182,7 @@ function MessageBubble({ message }) {
             {message.is_deleted ? (
               <p className="italic text-gray-300">This message was deleted</p>
             ) : isEditing ? (
-              <div className="flex items-center space-x-2">
+              <div className="flex min-w-0 items-center space-x-2">
                 <input
                   type="text"
                   value={editValue}
@@ -193,7 +193,7 @@ function MessageBubble({ message }) {
                   }}
                   autoFocus
                   disabled={isSaving}
-                  className="rounded bg-base px-2 py-1 text-sm text-white outline-none ring-1 ring-surface-3 focus:ring-brand"
+                  className="w-full min-w-0 rounded bg-base px-2 py-1 text-sm text-white outline-none ring-1 ring-surface-3 focus:ring-brand"
                 />
                 <IoCheckmark
                   className="size-5 cursor-pointer hover:text-green-300"
@@ -214,7 +214,7 @@ function MessageBubble({ message }) {
             )}
 
             {!message.is_deleted && message.images_url && (
-              <div className="relative w-40 h-50 rounded-lg border border-surface-2 flex items-center justify-center">
+              <div className="relative w-40 h-50 max-w-full rounded-lg sm:w-52 border border-surface-2 flex items-center justify-center">
                 <img
                   src={imageUrl}
                   alt="Sent"
