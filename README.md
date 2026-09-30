@@ -65,10 +65,9 @@ cd ../frontend && npm install
 
 ```bash
 cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
 ```
 
-Fill in `backend/.env` with your MySQL credentials and a strong `JWT_SECRET` (e.g. `openssl rand -hex 32`). The frontend `.env` only needs `VITE_API_URL` if your backend isn't on `http://localhost:5000/api`.
+Fill in `backend/.env` with your MySQL credentials and a strong `JWT_SECRET` (e.g. `openssl rand -hex 32`). The frontend has no `.env`; if your backend isn't on `http://localhost:5000/api`, change `API_URL` in `frontend/src/api/config.js`.
 
 ### 3. Set up the database
 

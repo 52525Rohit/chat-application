@@ -6,8 +6,9 @@ import {
   setRefreshToken,
   clearSession,
 } from "../utils/authStorage";
+import { API_URL } from "./config";
 
-export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+export { API_URL };
 export const UPLOADS_URL = `${API_URL}/uploads`;
 
 const AUTH_ENDPOINTS = ["/auth/login", "/auth/register", "/auth/refresh"];
