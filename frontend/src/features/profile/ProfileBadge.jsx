@@ -15,25 +15,31 @@ function ProfileBadge() {
     defaultAvatar;
 
   return (
-    <div className="relative left-46 bottom-9">
-      <div className="avatar">
-        <div className="w-16 rounded-full"></div>
-        <div className="relative">
-          <h2>{"🟢"}</h2>
-        </div>
-
-        <div className="absolute w-12 rounded-full right-5">
+    <div
+      onClick={() => navigate("/profileDetails")}
+      className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800/80 cursor-pointer transition-all duration-200 group"
+    >
+      {/* Avatar with Status Indicator */}
+      <div className="relative flex-shrink-0">
+        <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-indigo-500/30 group-hover:ring-indigo-500/70 transition-all">
           <img
             src={profilePic}
             alt="Profile"
-            onClick={() => navigate("/profileDetails")}
-            className="cursor-pointer"
+            className="w-full h-full object-cover"
           />
         </div>
+        {/* Online Status Dot */}
+        <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-slate-950" />
       </div>
 
-      <div>
-        <h1 className="relative left-4 text-red-400">{profile?.firstName}</h1>
+      {/* User Info */}
+      <div className="flex flex-col min-w-0 flex-1">
+        <h2 className="text-sm font-semibold text-slate-100 truncate group-hover:text-indigo-300 transition-colors">
+          {profile?.firstName || "User Profile"}
+        </h2>
+        <span className="text-xs text-slate-400 truncate">
+          {profile?.email || "View Account"}
+        </span>
       </div>
     </div>
   );

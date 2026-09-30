@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ColorRing } from "react-loader-spinner";
 import { MdOutlineFileDownload, MdEdit, MdDeleteOutline } from "react-icons/md";
 import { RiDownloadLine } from "react-icons/ri";
@@ -19,6 +19,8 @@ function MessageBubble({ message }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(message.message_content || "");
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteDialogRef = useRef(null);
   const [authUser] = useAuth();
   const { updateMessage } = useConversation();
 
@@ -103,8 +105,7 @@ function MessageBubble({ message }) {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Delete this message?")) return;
-
+    setIsDeleting(true);
     try {
       await deleteMessage(message.message_id);
       updateMessage(message.message_id, {
@@ -115,6 +116,9 @@ function MessageBubble({ message }) {
     } catch (error) {
       toast.error("Failed to delete message");
       console.error("Error deleting message:", error);
+    } finally {
+      setIsDeleting(false);
+      deleteDialogRef.current?.close();
     }
   };
 
@@ -160,7 +164,7 @@ function MessageBubble({ message }) {
                 />
                 <MdDeleteOutline
                   className="size-4 text-gray-200 cursor-pointer hover:text-red-400"
-                  onClick={handleDelete}
+                  onClick={() => deleteDialogRef.current?.showModal()}
                 />
               </div>
             )}
@@ -252,6 +256,33 @@ function MessageBubble({ message }) {
           </div>
         </div>
       </div>
+
+      <dialog ref={deleteDialogRef} className="modal">
+        <div className="modal-box bg-slate-800 text-white">
+          <h3 className="text-lg font-bold">Delete message?</h3>
+          <p className="py-3 text-gray-300">
+            This message will be deleted for everyone. This can't be undone.
+          </p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn btn-ghost" disabled={isDeleting}>
+                Cancel
+              </button>
+            </form>
+            <button
+              type="button"
+              className="btn btn-error"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </button>
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
 
       {isModalOpen && (
         <div
