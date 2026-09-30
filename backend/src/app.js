@@ -5,14 +5,10 @@ import userRoutes from "./routes/userRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 import { uploadsDir } from "./middlewares/upload.js";
+import { allowedOrigins } from "./config/allowedOrigins.js";
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://chat-application.rohitkumarrawani6.workers.dev",
-  process.env.CLIENT_URL, 
-].filter(Boolean); 
 
 app.use(
   cors({
