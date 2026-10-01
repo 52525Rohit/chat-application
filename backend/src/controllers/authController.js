@@ -1,4 +1,4 @@
-import fs from "fs/promises";
+import { removeUpload } from "../middlewares/upload.js";
 import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
 import RefreshToken from "../models/refreshTokenModel.js";
@@ -24,7 +24,7 @@ export const register = async (req, res, next) => {
   try {
     const existing = await User.findByEmail(email);
     if (existing) {
-      if (req.file) await fs.unlink(req.file.path).catch(() => {});
+      if (req.file) await removeUpload(req.file.filename);
       return res
         .status(400)
         .json({ success: false, message: "Email already exists" });
@@ -50,7 +50,7 @@ export const register = async (req, res, next) => {
       refreshToken,
     });
   } catch (error) {
-    if (req.file) await fs.unlink(req.file.path).catch(() => {});
+    if (req.file) await removeUpload(req.file.filename);
     return next(error);
   }
 };

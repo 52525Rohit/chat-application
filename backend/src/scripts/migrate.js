@@ -54,6 +54,19 @@ const run = async () => {
     console.log("Created refresh_tokens table");
   }
 
+  if (!(await tableExists("uploads"))) {
+    await pool.query(`
+      CREATE TABLE uploads (
+        name VARCHAR(255) NOT NULL,
+        mime_type VARCHAR(100) NOT NULL,
+        data MEDIUMBLOB NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (name)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    `);
+    console.log("Created uploads table");
+  }
+
   console.log("Migration complete");
   process.exit(0);
 };

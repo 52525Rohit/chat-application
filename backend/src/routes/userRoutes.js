@@ -4,7 +4,7 @@ import {
   createUser,
   updateProfilePic,
 } from "../controllers/userController.js";
-import { upload } from "../middlewares/upload.js";
+import { upload, saveUpload } from "../middlewares/upload.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -15,6 +15,7 @@ router.post(
   "/updateProfile",
   protect,
   upload.single("imageFile"),
+  saveUpload,
   updateProfilePic,
 );
 

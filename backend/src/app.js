@@ -4,7 +4,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
-import { uploadsDir } from "./middlewares/upload.js";
+import { serveUpload } from "./middlewares/upload.js";
 import { allowedOrigins } from "./config/allowedOrigins.js";
 
 const app = express();
@@ -32,7 +32,7 @@ app.use(
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-app.use("/api/uploads", express.static(uploadsDir));
+app.get("/api/uploads/:name", serveUpload);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);

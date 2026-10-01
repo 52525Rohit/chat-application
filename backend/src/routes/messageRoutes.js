@@ -5,7 +5,7 @@ import {
   editMessage,
   deleteMessage,
 } from "../controllers/messageController.js";
-import { upload } from "../middlewares/upload.js";
+import { upload, saveUpload } from "../middlewares/upload.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { validate } from "../middlewares/validate.js";
 import { sendMessageSchema, editMessageSchema } from "../validations/messageValidation.js";
@@ -17,6 +17,7 @@ router.post(
   "/",
   protect,
   upload.single("imageFile"),
+  saveUpload,
   validate(sendMessageSchema),
   sendMessage,
 );

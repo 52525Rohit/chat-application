@@ -1,8 +1,6 @@
-import fs from "fs/promises";
-import path from "path";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
-import { uploadsDir } from "../middlewares/upload.js";
+import { removeUpload } from "../middlewares/upload.js";
 import { getIO, getReceiverSocketId } from "../sockets/socketServer.js";
 
 export const sendMessage = async (req, res, next) => {
@@ -10,7 +8,7 @@ export const sendMessage = async (req, res, next) => {
   const { receiver_id, message_content } = req.body || {};
 
   if (!receiver_id || (!message_content?.trim() && !req.file)) {
-    if (req.file) await fs.unlink(req.file.path).catch(() => {});
+    if (req.file) await removeUpload(req.file.filename);
     return res.status(400).json({
       success: false,
       message:
@@ -47,7 +45,7 @@ export const sendMessage = async (req, res, next) => {
       messageData,
     });
   } catch (error) {
-    if (req.file) await fs.unlink(req.file.path).catch(() => {});
+    if (req.file) await removeUpload(req.file.filename);
     return next(error);
   }
 };
@@ -120,7 +118,7 @@ export const deleteMessage = async (req, res, next) => {
     }
 
     if (deleted.images_url) {
-      await fs.unlink(path.join(uploadsDir, deleted.images_url)).catch(() => {});
+      await removeUpload(deleted.images_url);
     }
 
     const receiverSocketId = getReceiverSocketId(String(deleted.receiver_id));

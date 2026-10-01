@@ -1,8 +1,6 @@
-import fs from "fs/promises";
-import path from "path";
 import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
-import { uploadsDir } from "../middlewares/upload.js";
+import { removeUpload } from "../middlewares/upload.js";
 
 export const getAllUsers = async (req, res, next) => {
   try {
@@ -27,16 +25,14 @@ export const updateProfilePic = async (req, res, next) => {
   try {
     const previousUser = await User.findById(employeeId);
     if (!previousUser) {
-      await fs.unlink(req.file.path).catch(() => {});
+      await removeUpload(req.file.filename);
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
     const updatedUser = await User.updateProfilePic(employeeId, req.file.filename);
 
     if (previousUser.profile_pic) {
-      await fs
-        .unlink(path.join(uploadsDir, previousUser.profile_pic))
-        .catch(() => {});
+      await removeUpload(previousUser.profile_pic);
     }
 
     return res.json({
@@ -45,7 +41,7 @@ export const updateProfilePic = async (req, res, next) => {
       user: User.toResponse(updatedUser),
     });
   } catch (error) {
-    await fs.unlink(req.file.path).catch(() => {});
+    await removeUpload(req.file.filename);
     return next(error);
   }
 };

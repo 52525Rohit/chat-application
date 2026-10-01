@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { MessageCircle } from "lucide-react";
+import { BsChat } from "react-icons/bs";
 import Login from "./Login";
 import Register from "./Register";
 import "./auth.css";
@@ -13,7 +13,7 @@ function AuthPage() {
     <div className="auth-page">
       <div className="auth-brand">
         <span className="auth-brand-icon">
-          <MessageCircle size={26} />
+          <BsChat size={24} />
         </span>
         <h1>
           Chat<span>App</span>
