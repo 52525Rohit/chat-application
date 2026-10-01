@@ -8,6 +8,12 @@ export const registerSchema = z.object({
   mobile: z.string().trim().min(1, "Mobile number is required").max(30),
 });
 
+export const updateProfileSchema = registerSchema.pick({
+  firstName: true,
+  lastName: true,
+  mobile: true,
+});
+
 export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),

@@ -1,10 +1,10 @@
-import fs from "fs/promises";
+import { removeUpload } from "./upload.js";
 
 export const validate = (schema) => (req, res, next) => {
   const result = schema.safeParse(req.body);
 
   if (!result.success) {
-    if (req.file) fs.unlink(req.file.path).catch(() => {});
+    if (req.file?.filename) removeUpload(req.file.filename);
     return res.status(400).json({
       success: false,
       message: "Validation failed",

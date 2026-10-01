@@ -12,6 +12,22 @@ export const getAllUsers = async (req, res, next) => {
   }
 };
 
+export const updateProfile = async (req, res, next) => {
+  try {
+    const updatedUser = await User.updateProfile(req.user.id, req.body);
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    return res.json({
+      success: true,
+      message: "Profile updated",
+      user: User.toResponse(updatedUser),
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const updateProfilePic = async (req, res, next) => {
   const employeeId = req.user.id;
 

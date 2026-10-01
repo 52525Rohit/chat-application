@@ -47,6 +47,14 @@ class User {
     return this.findById(id);
   }
 
+  static async updateProfile(id, { firstName, lastName, mobile }) {
+    await pool.query(
+      "UPDATE employees SET FirstName = ?, lastName = ?, mobile = ? WHERE id = ?",
+      [firstName, lastName, mobile, id],
+    );
+    return this.findById(id);
+  }
+
   static toResponse(row) {
     if (!row) return null;
     return {

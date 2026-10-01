@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { CiMenuFries } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import { TbMenu2 } from "react-icons/tb";
 import { FaUserAlt } from "react-icons/fa";
 import { IoCall } from "react-icons/io5";
 import { AiOutlineMail } from "react-icons/ai";
@@ -27,9 +28,9 @@ function NoChatSelected() {
       <label
         htmlFor="my-drawer-2"
         aria-label="Open chats"
-        className="btn btn-ghost btn-circle drawer-button absolute left-3 top-3 lg:hidden"
+        className="drawer-button absolute left-3 top-3 flex size-10 cursor-pointer items-center justify-center rounded-xl border border-surface-3 bg-surface text-brand transition hover:border-brand active:scale-95 lg:hidden"
       >
-        <CiMenuFries className="text-xl text-white" />
+        <TbMenu2 className="size-5" />
       </label>
       <div className="m-auto w-full max-w-md px-4 py-10">
         <div className="flex justify-center">
@@ -51,7 +52,11 @@ function NoChatSelected() {
 
         <div className="mt-8 space-y-3">
           {[
-            { icon: FaUserAlt, label: "Full name", value: profile?.firstName },
+            {
+              icon: FaUserAlt,
+              label: "Full name",
+              value: [profile?.firstName, profile?.lastName].filter(Boolean).join(" "),
+            },
             { icon: AiOutlineMail, label: "Email", value: profile?.email },
             { icon: IoCall, label: "Mobile no", value: profile?.mobile },
           ].map((row) => (
@@ -68,7 +73,16 @@ function NoChatSelected() {
           ))}
         </div>
 
-        <p className="mt-8 text-center text-sm text-gray-400">
+        <div className="mt-6 flex justify-center">
+          <Link
+            to="/profileDetails?edit=1"
+            className="btn btn-primary btn-sm px-6"
+          >
+            Edit profile
+          </Link>
+        </div>
+
+        <p className="mt-6 text-center text-sm text-gray-400">
           Select a chat to start messaging
         </p>
       </div>
