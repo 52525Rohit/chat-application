@@ -15,21 +15,28 @@ function ConversationItem({ user }) {
 
   return (
     <div
-      className={`flex cursor-pointer items-center gap-3 border-l-4 px-4 py-3 duration-300 hover:bg-surface-2 ${
-        isSelected ? "border-brand bg-brand/15" : "border-transparent"
+      className={`flex cursor-pointer items-center gap-3 rounded-lg border-l-4 px-3 py-2.5 duration-300 ${
+        isSelected ? "border-brand bg-brand/15" : "border-transparent hover:bg-surface-2"
       }`}
       onClick={() => {
         setSelectedConversation(user);
         closeDrawer();
       }}
     >
-      <div className={`avatar shrink-0 ${isOnline ? "avatar-online" : "avatar-offline"}`}>
-        <div className="w-11 rounded-full">
-          <img src={profilePic} alt="User Profile" />
-        </div>
+      <div className="relative shrink-0">
+        <img
+          src={profilePic}
+          alt="User Profile"
+          className="size-11 rounded-full object-cover"
+        />
+        <span
+          className={`absolute bottom-0 right-0 size-3 rounded-full ring-2 ring-surface ${
+            isOnline ? "bg-emerald-500" : "bg-gray-500"
+          }`}
+        />
       </div>
       <div className="min-w-0">
-        <h1 className="truncate font-bold">{user.firstName}</h1>
+        <h3 className="truncate font-semibold">{user.firstName}</h3>
         <span className="block truncate text-sm text-gray-400">{user.email}</span>
       </div>
     </div>

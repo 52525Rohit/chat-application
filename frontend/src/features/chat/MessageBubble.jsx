@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ColorRing } from "react-loader-spinner";
 import { MdOutlineFileDownload, MdEdit, MdDeleteOutline } from "react-icons/md";
 import { RiDownloadLine } from "react-icons/ri";
 import { IoCheckmark, IoCheckmarkDone, IoClose } from "react-icons/io5";
@@ -9,10 +8,7 @@ import { useAuth } from "../../context/AuthProvider";
 import { editMessage, deleteMessage } from "../../api/messageApi";
 import useConversation from "../../store/useConversationStore";
 
-const spinnerColors = Array(5).fill("#ff5a1f");
-
 function MessageBubble({ message }) {
-  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
   const [isImageVisible, setIsImageVisible] = useState(false);
@@ -33,7 +29,7 @@ function MessageBubble({ message }) {
     minute: "2-digit",
   });
 
-  const imageUrl = getProfilePicUrl(message.images_url);
+  const imageUrl = message.localImageUrl || getProfilePicUrl(message.images_url);
 
   const downloadImage = async (url) => {
     try {
@@ -129,11 +125,6 @@ function MessageBubble({ message }) {
   }, [message.images_url]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
     if (!isModalOpen) return undefined;
 
     const handleKeyDown = (e) => {
@@ -156,7 +147,7 @@ function MessageBubble({ message }) {
           <div
             className={`chat-bubble ${isSender ? chatColor : "bg-surface-2 text-white"} relative`}
           >
-            {isSender && !message.is_deleted && (
+            {isSender && !message.is_deleted && !message.pending && (
               <div className="absolute -top-3 right-1 hidden group-hover:flex [@media(hover:none)]:flex space-x-1 bg-surface rounded-full px-1.5 py-0.5">
                 <MdEdit
                   className="size-4 text-gray-200 cursor-pointer hover:text-white"
@@ -167,16 +158,6 @@ function MessageBubble({ message }) {
                   onClick={() => deleteDialogRef.current?.showModal()}
                 />
               </div>
-            )}
-
-            {isLoading && (
-              <ColorRing
-                visible
-                height="30"
-                width="30"
-                ariaLabel="color-ring-loading"
-                colors={spinnerColors}
-              />
             )}
 
             {message.is_deleted ? (
@@ -213,7 +194,7 @@ function MessageBubble({ message }) {
               />
             )}
 
-            {!message.is_deleted && message.images_url && (
+            {!message.is_deleted && imageUrl && (
               <div className="relative w-40 h-50 max-w-full rounded-lg sm:w-52 border border-surface-2 flex items-center justify-center">
                 <img
                   src={imageUrl}
@@ -246,7 +227,17 @@ function MessageBubble({ message }) {
             <span>{formattedTime}</span>
             {isSender && !message.is_deleted && (
               <span className={message.is_read ? "text-brand-light" : ""}>
-                {message.is_read ? (
+                {message.pending ? (
+                  <span className="inline-flex items-end gap-0.5" aria-label="Sending">
+                    {[0, 150, 300].map((delay) => (
+                      <span
+                        key={delay}
+                        className="size-1 animate-bounce rounded-full bg-gray-300"
+                        style={{ animationDelay: `${delay}ms` }}
+                      />
+                    ))}
+                  </span>
+                ) : message.is_read ? (
                   <IoCheckmarkDone className="inline size-4" />
                 ) : (
                   <IoCheckmark className="inline size-4" />

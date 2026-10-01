@@ -13,10 +13,10 @@ function ConversationList() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <h1 className="mx-3 rounded-md bg-surface-2 px-4 py-2 font-semibold text-white">
+      <h2 className="px-4 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">
         Messages
-      </h1>
-      <div className="min-h-0 flex-1 overflow-y-auto py-2">
+      </h2>
+      <div className="min-h-0 flex-1 space-y-0.5 overflow-y-auto px-2 py-1">
         {otherUsers.map((user) => (
           <ConversationItem key={user.id} user={user} />
         ))}

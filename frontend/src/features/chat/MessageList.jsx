@@ -54,7 +54,7 @@ function MessageList() {
       {!loading &&
         messages.map((message, index) => (
           <div
-            key={message.message_id ?? index}
+            key={message.client_key ?? message.message_id ?? index}
             ref={index === messages.length - 1 ? lastMsgRef : null}
           >
             <MessageBubble message={message} />

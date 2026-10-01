@@ -18,7 +18,7 @@ function HomePage() {
           aria-label="Close sidebar"
           className="drawer-overlay"
         ></label>
-        <div className="h-dvh w-[85vw] max-w-80 bg-surface">
+        <div className="h-dvh w-[85vw] max-w-[22.5rem] bg-surface">
           <Sidebar />
         </div>
       </div>

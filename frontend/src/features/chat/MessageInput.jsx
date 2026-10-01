@@ -7,6 +7,7 @@ import emoji from "../../../public/emoji.png";
 import { sendMessage } from "../../api/messageApi";
 import useConversation from "../../store/useConversationStore";
 import { useSocketContext } from "../../context/SocketContext";
+import { useAuth } from "../../context/AuthProvider";
 
 const TYPING_STOP_DELAY = 2000;
 
@@ -15,16 +16,12 @@ function MessageInput() {
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [isSending, setIsSending] = useState(false);
   const isTypingRef = useRef(false);
   const stopTypingTimerRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const {
-    messages,
-    setMessage: setMessages,
-    selectedConversation,
-  } = useConversation();
+  const { setMessage: setMessages, selectedConversation } = useConversation();
+  const [authUser] = useAuth();
   const { socket } = useSocketContext();
 
   const stopTyping = () => {
@@ -91,18 +88,43 @@ function MessageInput() {
     formData.append("message_content", message);
     if (image) formData.append("imageFile", image);
 
-    setIsSending(true);
+    // Show the message right away (WhatsApp style), swap in the saved one when the server replies
+    const clientKey = `temp-${Date.now()}`;
+    const localImageUrl = image ? URL.createObjectURL(image) : null;
+    setMessages((prev) => [
+      ...prev,
+      {
+        client_key: clientKey,
+        message_id: clientKey,
+        sender_id: authUser?.employeeData?.id,
+        receiver_id: selectedConversation?.id,
+        message_content: message,
+        images_url: null,
+        localImageUrl,
+        timestamp: new Date().toISOString(),
+        pending: true,
+      },
+    ]);
+    const sentText = message;
+    setMessage("");
+    handleRemoveImage();
+
     try {
       const result = await sendMessage(formData);
-      setMessages([...messages, result.messageData]);
-
-      setMessage("");
-      handleRemoveImage();
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.client_key === clientKey
+            ? { ...result.messageData, client_key: clientKey }
+            : m,
+        ),
+      );
     } catch (error) {
+      setMessages((prev) => prev.filter((m) => m.client_key !== clientKey));
+      setMessage(sentText);
       toast.error("Failed to send message");
       console.error("Error sending message:", error);
     } finally {
-      setIsSending(false);
+      if (localImageUrl) URL.revokeObjectURL(localImageUrl);
     }
   };
 
@@ -172,7 +194,6 @@ function MessageInput() {
 
         <button
           type="submit"
-          disabled={isSending}
           className="btn btn-circle btn-sm shrink-0 border-none bg-brand text-white hover:bg-brand-dark disabled:opacity-50"
         >
           <IoSend className="text-base" />
